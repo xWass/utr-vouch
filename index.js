@@ -43,9 +43,9 @@ client.once("ready", async function () {
 		type: "LISTENING"
 	});
 	let db = new sqlite.Database('./vouch.db', sqlite.OPEN_READWRITE | sqlite.OPEN_CREATE);
-	db.run(`CREATE TABLE IF NOT EXISTS data(userid INTEGER NOT NULL, vouches INTEGER NOT NULL, ts INTEGER NOT NULL)`);
-	db.run(`CREATE TABLE IF NOT EXISTS reasons(userid INTEGER NOT NULL, reason TEXT NOT NULL, ts INTEGER NOT NULL)`);
-	console.log("Vouching database created. \ndata table created in database. \nreasons table created in database.")
+	db.run(`CREATE TABLE IF NOT EXISTS data(userid INTEGER NOT NULL, vouches INTEGER NOT NULL)`);
+	db.run(`CREATE TABLE IF NOT EXISTS reasons(userid INTEGER NOT NULL, reason TEXT NOT NULL)`);
+	db.run(`CREATE TABLE IF NOT EXISTS timestamps(userid INTEGER NOT NULL, ts INTEGER NOT NULL)`);
 });
 
 
