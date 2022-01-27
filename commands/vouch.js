@@ -6,7 +6,6 @@ const {
     MessageButton
 } = require('discord.js');
 const sqlite = require('sqlite3')
-console.log("Someone just sent a vouch command.")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('vouch')
@@ -29,7 +28,7 @@ module.exports = {
         const mem = interaction.options.getMember('user');
         const res = interaction.options.getString('reason');
         const org = interaction.user.tag
-        // const toaster = interaction.guild.channels.cache.find(c => c.name === vouches)
+        const toaster = interaction.guild.channels.cache.find(c => c.name === "vouches")
         db.get(query, [user.id], async (err, row) => {
             if (err) {
                 console.log(err);
@@ -46,25 +45,33 @@ module.exports = {
                 insertTS.run(userid, ts);
                 insertTS.finalize();
 
-                console.log(`Heres what was in their command: \nUser they vouched for: ${mem} \nReason they vouched: ${res}`)
-
-                await interaction.reply({
-                    content: 'Added to db',
+                interaction.reply({
+                    content: `Vouch logged! \nYou vouched for ${mem} \nReason: ${res}`,
                     ephemeral: true
-                })
-                interaction.followUp({
+                });
+                if (!toaster) return;
+                toaster.send({
                     content: `${org} vouched for ${mem} \nReason: ${res}`,
                     ephemeral: false
-                });
+                })
             } else {
+                if (interaction.createdTimestamp - row.ts < 43200000) {
+                    console.log("true")
+                }
                 let num = row.vouches + 1
                 db.run(`UPDATE data SET vouches = ? WHERE userid = ?`, [num, user.id]);
-                db.run(`UPDATE data SET reasons = ? WHERE userid = ?`, [res, user.id]);
-                db.run(`UPDATE data SET timestamps = ? WHERE userid = ?`, [res, userid]);
+                db.run(`UPDATE reasons SET reason = ? WHERE userid = ?`, [res, user.id]);
+                db.run(`UPDATE timestamps SET ts = ? WHERE userid = ?`, [ts, userid]);
                 interaction.reply({
+                    content: `Vouch logged! \nYou vouched for ${mem} \nReason: ${res}`,
+                    ephemeral: true
+                });
+                if (!toaster) return;
+                toaster.send({
                     content: `${org} vouched for ${mem} \nReason: ${res}`,
                     ephemeral: false
-                });
+                })
+
             }
         })
     }
