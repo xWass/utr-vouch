@@ -20,7 +20,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 	try {
 		console.log('Started refreshing application (/) commands.');
 		await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
+			Routes.applicationCommands(clientId),
 			{ body: commands },
 		);
 		console.log('Successfully reloaded application (/) commands.');
@@ -39,7 +39,7 @@ client.once('ready', async () => {
 
 client.once("ready", async function () {
 	console.log(client.user.username + " is ready!");
-	client.user.setActivity("to utr vouches..", {
+	client.user.setActivity("to utr vouches.", {
 		type: "LISTENING"
 	});
 	let db = new sqlite.Database('./vouch.db', sqlite.OPEN_READWRITE | sqlite.OPEN_CREATE);

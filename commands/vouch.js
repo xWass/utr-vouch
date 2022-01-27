@@ -55,22 +55,36 @@ module.exports = {
                     ephemeral: false
                 })
             } else {
-                if (interaction.createdTimestamp - row.ts < 43200000) {
-                    console.log("true")
-                }
-                let num = row.vouches + 1
-                db.run(`UPDATE data SET vouches = ? WHERE userid = ?`, [num, user.id]);
-                db.run(`UPDATE reasons SET reason = ? WHERE userid = ?`, [res, user.id]);
-                db.run(`UPDATE timestamps SET ts = ? WHERE userid = ?`, [ts, userid]);
-                interaction.reply({
-                    content: `Vouch logged! \nYou vouched for ${mem} \nReason: ${res}`,
-                    ephemeral: true
-                });
-                if (!toaster) return;
-                toaster.send({
-                    content: `${org} vouched for ${mem} \nReason: ${res}`,
-                    ephemeral: false
+                const num = row.vouches + 1
+                let querya = `SELECT * FROM timestamps WHERE userid = ?`;
+                db.get(querya, [userid], async (err, row) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    if (interaction.createdTimestamp - row.ts < 43200000) {
+                        console.log("true")
+                        interaction.reply({
+                            content: `You can not use this right now! \nIf you need to vouch for someone, ask a moderator to remove your vouch cooldown.`,
+                            ephemeral: true
+                        });
+                        return;
+                    }
+                    db.run(`UPDATE data SET vouches = ? WHERE userid = ?`, [num, user.id]);
+                    db.run(`UPDATE reasons SET reason = ? WHERE userid = ?`, [res, user.id]);
+                    db.run(`UPDATE timestamps SET ts = ? WHERE userid = ?`, [ts, userid]);
+                    interaction.reply({
+                        content: `Vouch logged! \nYou vouched for ${mem} \nReason: ${res}`,
+                        ephemeral: true
+                    });
+                    if (!toaster) return;
+                    toaster.send({
+                        content: `${org} vouched for ${mem} \nReason: ${res}`,
+                        ephemeral: false
+                    })
+    
                 })
+
 
             }
         })
