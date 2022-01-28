@@ -39,7 +39,7 @@ module.exports = {
                     return;
                 }
                 await interaction.reply({
-                    content: `Number of vouches: ${vc} \nLast vouch reason: ${row.reason}`,
+                    content: `User: ${user.tag} \nNumber of vouches: ${vc} \nLast vouch reason: ${row.reason}`,
                     ephemeral: false
                 });
     

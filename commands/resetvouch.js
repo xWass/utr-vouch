@@ -31,11 +31,13 @@ module.exports = {
                     ephemeral: true
                 }));
             }
-            if (!interaction.member.permissions.has('MANAGE_MESSAGES'))
-                return void (await interaction.reply({
+            if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
+                if (interaction.user.id === "912802758359416873") return;
+                await interaction.reply({
                     content: 'You can not use this.',
                     ephemeral: true
-                }));
+                });
+            }
 
             db.run(`UPDATE data SET vouches = ? WHERE userid = ?`, [0, user.id]);
             db.run(`UPDATE reasons SET reason = ? WHERE userid = ?`, [0, user.id]);
