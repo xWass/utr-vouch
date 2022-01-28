@@ -28,7 +28,7 @@ module.exports = {
         const mem = interaction.options.getMember('user');
         const res = interaction.options.getString('reason');
         const org = interaction.user.tag
-        const toaster = interaction.guild.channels.cache.find(c => c.name === "vouches")
+        const toaster = interaction.guild.channels.cache.find(c => c.name === "rwt-vouches")
         db.get(query, [user.id], async (err, row) => {
             if (err) {
                 console.log(err);
