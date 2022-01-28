@@ -26,14 +26,12 @@ module.exports = {
                 return;
             }
 
-            if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
-                if (interaction.user.id === "912802758359416873") return;
+            if (interaction.user.id === "912802758359416873" || !interaction.member.permissions.has('MANAGE_MESSAGES')) {
                 await interaction.reply({
                     content: 'You can not use this.',
                     ephemeral: true
                 });
             }
-
             db.run(`UPDATE timestamps SET ts = ? WHERE userid = ?`, [0, user.id]);
             await interaction.reply({
                 content: `User's vouch cooldown removed.`,
