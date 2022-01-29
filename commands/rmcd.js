@@ -26,7 +26,7 @@ module.exports = {
                 return;
             }
 
-            if (interaction.user.id !== "912802758359416873" || !interaction.member.permissions.has('MANAGE_MESSAGES')) {
+            if (interaction.user.id !== "912802758359416873" && !interaction.member.permissions.has('MANAGE_MESSAGES')) {
                 await interaction.reply({
                     content: 'You can not use this.',
                     ephemeral: true
